@@ -1,6 +1,7 @@
 ﻿using FirstMonolithicProject.ApplicationServices.Dtos.PersonDtos;
 using FirstMonolithicProject.ApplicationServices.Services.Contracts;
 using FirstMonolithicProject.Models.Services.Contracts;
+using FirstMonolithicProject.Models.DomainModels.PersonAggregates;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FirstMonolithicProject.ApplicationServices
@@ -22,7 +23,7 @@ namespace FirstMonolithicProject.ApplicationServices
             { 
                 return ;
             }
-            var updatePerson = new Models.DomainModels.PersonAggregates.Person()
+            var updatePerson = new Person()
             {
                 Id = updatePersonDto.Id,
                 FirstName = updatePersonDto.FirstName,
@@ -41,7 +42,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 return;
             }
-            var deletePerson = new Models.DomainModels.PersonAggregates.Person()
+            var deletePerson = new Person()
             {  
                 Id = deletePersonDto.Id,
                 FirstName = deletePersonDto.FirstName,
@@ -60,7 +61,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 return;
             }
-            var person = new Models.DomainModels.PersonAggregates.Person()
+            var person = new Person()
             {
                 Id = postPersonDto.Id,
                 FirstName = postPersonDto.FirstName,

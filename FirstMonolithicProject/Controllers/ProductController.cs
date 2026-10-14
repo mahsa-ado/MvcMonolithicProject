@@ -30,15 +30,16 @@ public class ProductController : Controller
             Id = product.Id,
             Title = product.Title,
             Price = product.Price,
-            Description = product.Description,
+            DescriptionRecord = product.DescriptionRecord,
 
         };
         return View(detailDto);
-    } 
+    }
     #endregion
 
     #region [- Edit() -]
-    #region [-Get-]
+
+    #region [- Get() -]
     [HttpGet]
     public async Task<IActionResult> Edit(int Id)
     {
@@ -52,14 +53,15 @@ public class ProductController : Controller
             Id = product.Id,
             Title = product.Title,
             Price = product.Price,
-            Description = product.Description
+            DescriptionRecord = product.DescriptionRecord
         };
         
 
         return View(updateDto);
     }
     #endregion
-    #region [-Post-]
+
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(UpdateProductDto updateProductDto)
@@ -75,10 +77,12 @@ public class ProductController : Controller
         }
     }
     #endregion
+
     #endregion
 
     #region [- Delete() -]
-    #region [-Get-]
+
+    #region [- Get() -]
     [HttpGet]
     public async Task<IActionResult> Delete(int Id)
     {
@@ -93,7 +97,7 @@ public class ProductController : Controller
                 Id = product.Id,
                 Title = product.Title,
                 Price = product.Price,
-                Description = product.Description,
+                DescriptionRecord = product.DescriptionRecord,
         };
         
         return View(deleteDto);
@@ -101,7 +105,7 @@ public class ProductController : Controller
     }
     #endregion
 
-    #region [- Post -]
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(DeleteProductDto deleteProductDto)
@@ -118,17 +122,20 @@ public class ProductController : Controller
         }
     }
     #endregion
+
     #endregion
 
     #region [- Create() -]
-    #region [-Get-]
+
+    #region [- Get() -]
     [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
     #endregion
-    #region [-Post-]
+
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PostProductDto postProductDto)

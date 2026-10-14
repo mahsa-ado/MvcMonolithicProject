@@ -1,5 +1,6 @@
 ﻿using FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos;
 using FirstMonolithicProject.ApplicationServices.Services.Contracts;
+using FirstMonolithicProject.Models.DomainModels.ProductAggregates;
 using FirstMonolithicProject.Models.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -23,12 +24,12 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 return;
             }
-            var updateProduct = new Models.DomainModels.ProductAggregates.Product()
+            var updateProduct = new Product()
             {
                 Id=updateProductDto.Id,
                 Title = updateProductDto.Title,
                 Price = updateProductDto.Price,
-                Description = updateProductDto.Description,
+                DescriptionRecord = updateProductDto.DescriptionRecord,
             };
             
             await _productRepository.Update(updateProduct);
@@ -42,12 +43,12 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 return;
             }
-            var deleteProducts = new Models.DomainModels.ProductAggregates.Product()
+            var deleteProducts = new Product()
             {
                 Id=deleteProductDto.Id,
                 Title = deleteProductDto.Title,
                 Price = deleteProductDto.Price,
-                Description = deleteProductDto.Description,
+                DescriptionRecord = deleteProductDto.DescriptionRecord,
             };
             await _productRepository.Delete(deleteProducts);
         }
@@ -60,12 +61,12 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 return;
             }
-            var products = new Models.DomainModels.ProductAggregates.Product()
+            var products = new Product()
             {
                 Id= postProductDto.Id,
                 Title = postProductDto.Title,
                 Price = postProductDto.Price,
-                Description = postProductDto.Description,
+                DescriptionRecord = postProductDto.DescriptionRecord,
             };
             await _productRepository.Insert(products);
         }
@@ -85,7 +86,7 @@ namespace FirstMonolithicProject.ApplicationServices
                     Id= product.Id,
                     Title = product.Title,
                     Price = product.Price,
-                    Description = product.Description,
+                    DescriptionRecord = product.DescriptionRecord,
                 };
                 getDto.Add(productDto);
             }
@@ -109,7 +110,7 @@ namespace FirstMonolithicProject.ApplicationServices
                 Id = product.Id,
                 Title = product.Title,
                 Price = product.Price,
-                Description = product.Description,
+                DescriptionRecord = product.DescriptionRecord,
             };
 
             return getProduct;

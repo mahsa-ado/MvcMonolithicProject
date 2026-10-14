@@ -53,7 +53,7 @@ namespace FirstMonolithicProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("DescriptionRecord")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
