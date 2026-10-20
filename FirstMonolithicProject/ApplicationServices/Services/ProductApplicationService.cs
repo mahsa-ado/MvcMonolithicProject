@@ -5,7 +5,7 @@ using FirstMonolithicProject.Models.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace FirstMonolithicProject.ApplicationServices
+namespace FirstMonolithicProject.ApplicationServices.Services
 {
     public class ProductApplicationService:IProductApplicationService
     {
@@ -28,7 +28,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 Id=updateProductDto.Id,
                 Title = updateProductDto.Title,
-                Price = updateProductDto.Price,
+                UnitPrice = updateProductDto.UnitPrice,
                 DescriptionRecord = updateProductDto.DescriptionRecord,
             };
             
@@ -47,7 +47,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 Id=deleteProductDto.Id,
                 Title = deleteProductDto.Title,
-                Price = deleteProductDto.Price,
+                UnitPrice = deleteProductDto.UnitPrice,
                 DescriptionRecord = deleteProductDto.DescriptionRecord,
             };
             await _productRepository.Delete(deleteProducts);
@@ -65,7 +65,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 Id= postProductDto.Id,
                 Title = postProductDto.Title,
-                Price = postProductDto.Price,
+                UnitPrice = postProductDto.UnitPrice,
                 DescriptionRecord = postProductDto.DescriptionRecord,
             };
             await _productRepository.Insert(products);
@@ -85,7 +85,7 @@ namespace FirstMonolithicProject.ApplicationServices
                 {
                     Id= product.Id,
                     Title = product.Title,
-                    Price = product.Price,
+                    UnitPrice = product.UnitPrice,
                     DescriptionRecord = product.DescriptionRecord,
                 };
                 getDto.Add(productDto);
@@ -109,7 +109,7 @@ namespace FirstMonolithicProject.ApplicationServices
             {
                 Id = product.Id,
                 Title = product.Title,
-                Price = product.Price,
+                UnitPrice = product.UnitPrice,
                 DescriptionRecord = product.DescriptionRecord,
             };
 

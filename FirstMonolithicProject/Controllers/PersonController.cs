@@ -21,9 +21,9 @@ public class PersonController : Controller
 
     #region [- Detail() -]
 
-    public async Task<IActionResult> Detail(int Id)
+    public async Task<IActionResult> Detail(GetPersonDtoById getPersonDtoById)
     {
-        var person = await _personApplicationService.GetById(Id);
+        var person = await _personApplicationService.GetById(getPersonDtoById);
         if (person == null)
         {
             return NotFound();
@@ -40,16 +40,16 @@ public class PersonController : Controller
     #endregion
 
     #region [- Edit() -]
-    #region [-Get-]
+    #region [- Get() -]
     [HttpGet]
-    public async Task<IActionResult> Edit(int Id)
+    public async Task<IActionResult> Edit(GetPersonDtoById getPersonDtoById)
     {
-        var person=await _personApplicationService.GetById(Id);
+        var person=await _personApplicationService.GetById(getPersonDtoById);
         if (person==null)
         {
             return NotFound();
         }
-        var editDto = new UpdatePersonDto()
+        var editDto = new PutPersonDto()
         {
             Id = person.Id,
             FirstName = person.FirstName,
@@ -59,44 +59,44 @@ public class PersonController : Controller
         return View(editDto);
     }
     #endregion
-    #region [-Post-]
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(UpdatePersonDto updatePersonDto)
+    public async Task<IActionResult> Edit(PutPersonDto putPersonDto)
     {
         if (ModelState.IsValid)
         {
-            await _personApplicationService.Put(updatePersonDto);
+            await _personApplicationService.Put(putPersonDto);
             return RedirectToAction(nameof(Index));
         }
         else
         {
-            return View(updatePersonDto);
+            return View(putPersonDto);
         }
     }
     #endregion
     #endregion
 
     #region [- Delete() -]
-    #region [-Get-]
-    public async Task<IActionResult> Delete(int Id)
-    {   
-        var person =await _personApplicationService.GetById(Id);
-        if(person==null)
+    #region [- Get() -]
+    public async Task<IActionResult> Delete(GetPersonDtoById getPersonDtoById) 
+    {
+        if (getPersonDtoById == null )
         {
             return NotFound();
         }
-        var deleteDto = new DeletePersonDto()
+
+        var person = await _personApplicationService.GetById(getPersonDtoById);
+
+        if (person == null)
         {
-            Id = person.Id,
-            FirstName = person.FirstName,
-            LastName = person.LastName,
-            Age = person.Age,
-        };
-        return View(deleteDto);
+            return NotFound();
+        }
+        return View(person);
     }
+
     #endregion
-    #region [-Post-]
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(DeletePersonDto deletePersonDto)
@@ -105,6 +105,7 @@ public class PersonController : Controller
         {
             await _personApplicationService.Delete(deletePersonDto);
             return RedirectToAction(nameof(Index));
+
         }
         else
         {
@@ -124,13 +125,14 @@ public class PersonController : Controller
 
     #region [- create() -]
 
-    #region [-Get-]
+    #region [- Get() -]
+    [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
     #endregion
-    #region [-Post-]
+    #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> create(PostPersonDto postPersonDto)

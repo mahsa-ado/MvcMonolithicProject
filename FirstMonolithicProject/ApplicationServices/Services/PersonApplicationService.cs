@@ -4,7 +4,7 @@ using FirstMonolithicProject.Models.Services.Contracts;
 using FirstMonolithicProject.Models.DomainModels.PersonAggregates;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace FirstMonolithicProject.ApplicationServices
+namespace FirstMonolithicProject.ApplicationServices.Services
 {
     public class PersonApplicationService:IPersonApplicationService
     {
@@ -17,20 +17,20 @@ namespace FirstMonolithicProject.ApplicationServices
 
         #endregion
 
-        #region [- Update() -]
-        public async Task Put(UpdatePersonDto updatePersonDto)
-        {   if(updatePersonDto == null)
+        #region [- Put() -]
+        public async Task Put(PutPersonDto putPersonDto)
+        {   if(putPersonDto == null)
             { 
                 return ;
             }
-            var updatePerson = new Person()
+            var putPerson = new Person()
             {
-                Id = updatePersonDto.Id,
-                FirstName = updatePersonDto.FirstName,
-                LastName = updatePersonDto.LastName,
-                Age = updatePersonDto.Age,
+                Id = putPersonDto.Id,
+                FirstName = putPersonDto.FirstName,
+                LastName = putPersonDto.LastName,
+                Age = putPersonDto.Age,
             };
-            await _personRepository.Update(updatePerson);
+            await _personRepository.Update(putPerson);
         }
 
         #endregion
@@ -92,22 +92,24 @@ namespace FirstMonolithicProject.ApplicationServices
         }
         #endregion
 
+        //check line100
+
         #region [- GetById() -]
-        public async Task<GetPersonDtoById?> GetById(int Id)
+        public async Task<PutPersonDto?> GetById(GetPersonDtoById getPersonDtoById)
         {
-            var person = await _personRepository.SelectById(Id);
+            var person = await _personRepository.SelectById(getPersonDtoById);
             if (person == null)
             {
                 return null ;
             }
-            var getPersonDto = new GetPersonDtoById()
+            var putPersonDto = new PutPersonDto
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 Age = person.Age
             };
-            return getPersonDto;
+            return putPersonDto;
         } 
         #endregion
 

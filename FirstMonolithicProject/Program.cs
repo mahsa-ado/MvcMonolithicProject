@@ -1,4 +1,4 @@
-using FirstMonolithicProject.ApplicationServices;
+using FirstMonolithicProject.ApplicationServices.Services;
 using FirstMonolithicProject.ApplicationServices.Services.Contracts;
 using FirstMonolithicProject.Models.Services.Contracts;
 using FirstMonolithicProject.Models.Services.Repositories;

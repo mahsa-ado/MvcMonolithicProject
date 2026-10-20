@@ -5,7 +5,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
     public interface IPersonApplicationService
     {
         #region [- Put() -]
-        Task Put(UpdatePersonDto updatePersonDto);
+        Task Put(PutPersonDto putPersonDto);
         #endregion
 
         #region [- Delete() -]
@@ -22,8 +22,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
         #endregion
 
         #region [- GetById() -]
-        Task<GetPersonDtoById> GetById(int id);
-
+        Task<PutPersonDto?> GetById(GetPersonDtoById getPersonDtoById);
         #endregion
 
     }

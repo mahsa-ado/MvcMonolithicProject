@@ -1,0 +1,293 @@
+-- ایجاد دیتابیس
+CREATE DATABASE DataBaseClass
+GO
+
+USE DataBaseClass;
+GO
+
+--  ناشران
+CREATE TABLE publishers (
+    pub_id      NVARCHAR(4)     NOT NULL PRIMARY KEY,
+    pub_name    NVARCHAR(40)    NULL,
+    city        NVARCHAR(20)    NULL,
+    state       NVARCHAR(30)     NULL,
+    country     NVARCHAR(30)    NULL 
+);
+
+--  اطلاعات ناشر
+CREATE TABLE pub_info (
+    pub_id      NVARCHAR(4)     NOT NULL PRIMARY KEY,
+    logo        VARBINARY(MAX)  NULL,
+    pr_info     NVARCHAR(MAX)   NULL,
+    CONSTRAINT FK_pub_info_publishers FOREIGN KEY (pub_id) REFERENCES publishers(pub_id)
+);
+
+--  مشاغل
+CREATE TABLE jobs (
+    job_id      SMALLINT PRIMARY KEY       IDENTITY(1,1) ,
+    job_desc    NVARCHAR(50)    NOT NULL ,
+    min_lvl     TINYINT         NOT NULL,
+    max_lvl     TINYINT         NOT NULL
+);
+
+--  کارمندان
+CREATE TABLE employee (
+    emp_id      NVARCHAR(9)     NOT NULL PRIMARY KEY,
+    fname       NVARCHAR(20)    NOT NULL,
+    minit       NVARCHAR(1)     NULL,
+    lname       NVARCHAR(30)    NOT NULL,
+    job_id      SMALLINT        NOT NULL ,
+    job_lvl     TINYINT         NULL  ,
+    pub_id      NVARCHAR(4)     NOT NULL ,
+    hire_date   DATETIME        NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_employee_jobs FOREIGN KEY (job_id) REFERENCES jobs(job_id),
+    CONSTRAINT FK_employee_publishers FOREIGN KEY (pub_id) REFERENCES publishers(pub_id)
+);
+
+-- جدول نویسندگان
+CREATE TABLE authors (
+    au_id       NVARCHAR(11)    NOT NULL PRIMARY KEY,
+    au_lname    NVARCHAR(40)    NOT NULL,
+    au_fname    NVARCHAR(20)    NOT NULL,
+    phone       NVARCHAR(12)    NOT NULL ,
+    address     NVARCHAR(40)    NULL,
+    city        NVARCHAR(20)    NULL,
+    state       NVARCHAR(2)     NULL,
+    zip         NVARCHAR(5)     NULL,
+    contract    BIT             NOT NULL
+);
+
+-- جدول کتاب‌ها
+CREATE TABLE titles (
+    title_id    NVARCHAR(6)     NOT NULL PRIMARY KEY,
+    title       NVARCHAR(80)    NOT NULL,
+    type        NVARCHAR(12)    NOT NULL DEFAULT N'UNDECIDED',
+    pub_id      NVARCHAR(4)     NULL,
+    price       MONEY           NULL,
+    advance     MONEY           NULL,
+    royalty     INT             NULL,
+    ytd_sales   INT             NULL,
+    notes       NVARCHAR(200)   NULL,
+    pubdate     DATETIME        NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_titles_publishers FOREIGN KEY (pub_id) REFERENCES publishers(pub_id)
+);
+
+-- جدول رابطه نویسنده و عنوان
+CREATE TABLE titleauthor (
+    au_id       NVARCHAR(11)    NOT NULL,
+    title_id    NVARCHAR(6)     NOT NULL,
+    au_ord      TINYINT         NULL,
+    royaltyper  INT             NULL,
+    PRIMARY KEY (au_id, title_id),
+    CONSTRAINT FK_titleauthor_authors FOREIGN KEY (au_id) REFERENCES authors(au_id),
+    CONSTRAINT FK_titleauthor_titles FOREIGN KEY (title_id) REFERENCES titles(title_id)
+);
+
+-- جدول فروشگاه‌ها
+CREATE TABLE stores (
+    stor_id     NVARCHAR(4)     NOT NULL PRIMARY KEY,
+    stor_name   NVARCHAR(40)    NULL,
+    stor_address NVARCHAR(40)   NULL,
+    city        NVARCHAR(20)    NULL,
+    state       NVARCHAR(2)     NULL,
+    zip         NVARCHAR(5)     NULL
+);
+
+-- جدول فروش
+CREATE TABLE sales (
+    stor_id     NVARCHAR(4)     NOT NULL,
+    ord_num     NVARCHAR(20)    NOT NULL,
+    ord_date    DATETIME        NOT NULL,
+    qty         SMALLINT        NOT NULL,
+    payterms    NVARCHAR(12)    NOT NULL,
+    title_id    NVARCHAR(6)     NOT NULL,
+    PRIMARY KEY (stor_id, ord_num, title_id),
+    CONSTRAINT FK_sales_stores FOREIGN KEY (stor_id) REFERENCES stores(stor_id),
+    CONSTRAINT FK_sales_titles FOREIGN KEY (title_id) REFERENCES titles(title_id)
+);
+
+-- جدول تخفیف‌ها
+CREATE TABLE discounts (
+    discounttype NVARCHAR(40)   NOT NULL,
+    stor_id     NVARCHAR(4)     NULL,
+    lowqty      SMALLINT        NULL,
+    highqty     SMALLINT        NULL,
+    discount    MONEY    NOT NULL,
+    CONSTRAINT FK_discounts_stores FOREIGN KEY (stor_id) REFERENCES stores(stor_id)
+);
+
+-- جدول  حق‌التألیف
+CREATE TABLE roysched (
+    title_id    NVARCHAR(6)     NOT NULL,
+    lorange     INT             NULL,
+    hirange     INT             NULL,
+    royalty     INT             NULL,
+    CONSTRAINT FK_roysched_titles FOREIGN KEY (title_id) REFERENCES titles(title_id)
+);
+GO
+
+--data entry
+
+INSERT INTO publishers (pub_id, pub_name, city, state, country) VALUES
+(N'0736', N'انتشارات نیما', N'تهران', N'TE', N'ایران'),
+(N'0877', N'نشر چشمه', N'تهران', N'TE', N'ایران'),
+(N'1389', N'انتشارات سخن', N'اصفهان', N'IS', N'ایران'),
+(N'1622', N'نشر مرکز', N'شیراز', N'FA', N'ایران'),
+(N'1756', N'انتشارات ققنوس', N'مشهد', N'KH', N'ایران'),
+(N'9901', N'نشر ثالث', N'تبریز', N'EA', N'ایران'),
+(N'9952', N'انتشارات امیرکبیر', N'تهران', N'TE', N'ایران'),
+(N'9999', N'نشر هرمس', N'تهران', N'TE', N'ایران'),
+(N'1888', N'انتشارات تبریز',N'تبریز', N'EA', N'ایران');
+
+-- اطلاعات ناشر
+INSERT INTO pub_info (pub_id, pr_info) VALUES
+(N'0736', N'ناشر تخصصی ادبیات معاصر ایران'),
+(N'0877', N'فعال در زمینه رمان و داستان کوتاه'),
+(N'1389', N'ناشر کتاب‌های فلسفی و تاریخی'),
+(N'1622', N'تخصص در کتاب‌های کودک و نوجوان'),
+(N'1756', N'ناشر آثار کلاسیک فارسی'),
+(N'9901', N'فعال در حوزه علوم انسانی'),
+(N'9952', N'یکی از قدیمی‌ترین ناشران ایران'),
+(N'9999', N'ناشر تخصصی فلسفه و عرفان'),
+(N'1888', N'ناشر فرضی کتاب‌های تاریخی و تجاری تبریز');
+
+-- مشاغل
+INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES
+(N'مدیرعامل', 200, 250),
+(N'مدیر بازاریابی', 150, 200),
+(N'مدیر تولید', 150, 200),
+(N'ویراستار ارشد', 100, 150),
+(N'ویراستار', 50, 100),
+(N'طراح گرافیک', 50, 100),
+(N'کارمند فروش', 25, 50),
+(N'کارمند انبار', 25, 50),
+(N'دستیار اداری', 10, 50),
+(N'حسابدار', 75, 125);
+
+-- کارمندان
+INSERT INTO employee (emp_id, fname, minit, lname, job_id, job_lvl, pub_id, hire_date) VALUES
+(N'PMA42628M', N'پویا', N'م', N'محمدی', 1, 220, N'0736', '2018-03-15'),
+(N'PSA89086M', N'پریسا', N'س', N'احمدی', 2, 175, N'0877', '2019-07-22'),
+(N'VPA30890F', N'وحید', N'پ', N'اکبری', 3, 180, N'1389', '2017-11-05'),
+(N'F-C1420M', N'فرزاد', NULL, N'کریمی', 4, 130, N'1622', '2020-01-18'),
+(N'LAL1240M', N'لیلا', N'ا', N'لشگری', 5, 85, N'1756', '2021-05-30'),
+(N'MAS70474F', N'مریم', N'ا', N'صادقی', 6, 70, N'9901', '2019-09-12'),
+(N'CGS88322F', N'سینا', N'گ', N'شریفی', 7, 40, N'9952', '2022-02-28'),
+(N'PTC11962M', N'پارسا', N'ت', N'توکلی', 8, 35, N'9999', '2020-08-14'),
+(N'DBD23490M', N'دانیال', N'ب', N'داوودی', 9, 25, N'0736', '2023-01-10'),
+(N'RBM23061F', N'رها', N'ب', N'مرادی', 10, 95, N'0877', '2018-12-03');
+
+-- نویسندگان
+INSERT INTO authors (au_id, au_lname, au_fname, phone, address, city, state, zip, contract) VALUES
+(N'172-32-1176', N'هدایت', N'صادق', N'021-88901234', N'خیابان ولیعصر، پلاک ۱۲۳', N'تهران', N'TE', N'14155', 1),
+(N'213-46-8915', N'آل‌احمد', N'جلال', N'021-66778899', N'خیابان انقلاب، کوچه ۵', N'تهران', N'TE', N'13145', 1),
+(N'238-95-7766', N'دولت‌آبادی', N'محمود', N'031-32221100', N'خیابان چهارباغ، پلاک ۴۵', N'اصفهان', N'IS', N'81456', 1),
+(N'267-41-2394', N'دانشور', N'سیمین', N'021-88887766', N'خیابان شریعتی، پلاک ۷۸', N'تهران', N'TE', N'19187', 1),
+(N'274-80-9391', N'چوبک', N'صادق', N'071-32233445', N'خیابان زند، پلاک ۲۲', N'شیراز', N'FA', N'71365', 1),
+(N'341-22-1782', N'ابراهیمی', N'نادر', N'021-22334455', N'خیابان سعادت‌آباد', N'تهران', N'TE', N'19818', 1),
+(N'409-56-7008', N'مرادی', N'فرهاد', N'041-33322110', N'خیابان امام، پلاک ۹۰', N'تبریز', N'EA', N'51368', 0),
+(N'427-17-2319', N'کاظمی', N'زهرا', N'051-38445566', N'خیابان دانشگاه', N'مشهد', N'KH', N'91779', 1),
+(N'472-27-2349', N'رضایی', N'امیر', N'021-44556677', N'خیابان آزادی', N'تهران', N'TE', N'14588', 1),
+(N'486-29-1786', N'نوری', N'مینا', N'021-77889900', N'خیابان پاسداران', N'تهران', N'TE', N'19488', 1),
+(N'500-11-0005', N'راد', N'پیمان',N'041-33330005', N'خیابان شمس',  N'تبریز', N'EA', N'51369', 1),
+(N'500-11-0006', N'اندیش', N'نگار',N'021-33330006', N'خیابان بهار',N'تهران', N'TE', N'13146', 1);
+
+-- عناوین کتاب‌ها
+INSERT INTO titles (title_id, title, type, pub_id, price, advance, royalty, ytd_sales, notes, pubdate) VALUES
+(N'BU1032', N'بوف کور', N'رمان', N'0736', 185000, 5000000, 10, 4095, N'یکی از مهم‌ترین آثار ادبیات مدرن فارسی', '1937-01-01'),
+(N'BU1111', N'مدیر مدرسه', N'رمان', N'0877', 95000, 2000000, 12, 3876, N'داستان انتقادی از نظام آموزشی', '1958-01-01'),
+(N'BU2075', N'کلیدر', N'رمان', N'1389', 450000, 15000000, 15, 18722, N'حماسه بزرگ ادبیات معاصر ایران', '1978-01-01'),
+(N'BU7832', N'سووشون', N'رمان', N'1622', 175000, 4000000, 10, 4095, N'رمان تاریخی و اجتماعی', '1969-01-01'),
+(N'PC1035', N'سنگ صبور', N'داستان', N'1756', 120000, 2500000, 10, 8780, N'از آثار برجسته صادق چوبک', '1966-01-01'),
+(N'PC8888', N'آتش بدون دود', N'رمان', N'9901', 220000, 6000000, 12, 4095, N'رمان تاریخی نادر ابراهیمی', '1979-01-01'),
+(N'PS1372', N'شب‌های تهران', N'داستان کوتاه', N'9952', 85000, 1500000, 10, 375, N'مجموعه داستان‌های معاصر', '2020-05-15'),
+(N'PS2091', N'یادداشت‌های یک نویسنده', N'مقاله', N'9999', 110000, 2000000, 14, 2045, N'مجموعه مقالات ادبی', '2018-11-20'),
+(N'PS2106', N'در جستجوی زمان از دست رفته', N'رمان', N'0736', 380000, 10000000, 15, 111, N'ترجمه اثر مارسل پروست', '2021-03-10'),
+(N'TC3218', N'راهنمای برنامه‌نویسی پایتون', N'فنی', N'0877', 250000, 3000000, 10, 375, N'کتاب آموزشی برنامه‌نویسی', '2022-09-01'),
+(N'BK1001', N'اصول تجارت نوین', N'تجاری',N'1756', 320000, 2000000, 10, 0,N'کتابی فرضی درباره اصول تجارت و بازار','2025-01-10'),
+(N'BK1002', N'تاریخ بازرگانی ایران', N'تاریخی',N'1756', 280000, 1500000, 12, 0,N'مروری فرضی بر تاریخ تجارت ایران', '2025-02-15'),
+(N'BK1003', N'مدیریت کسب‌وکار', N'تجاری',N'1756', 350000, 2500000, 10, 0,N'مبانی فرضی مدیریت و توسعه کسب‌وکار','2025-03-20'),
+(N'BK1004', N'تاریخ تبریز در گذر زمان', N'تاریخی',N'1888', 260000, 1200000, 12, 0,N'روایتی فرضی از تاریخ شهر تبریز','2025-04-10'),
+(N'BK1005', N'تجارت در جاده ابریشم', N'تاریخی',N'1888', 390000, 3000000, 15, 0,N'بررسی فرضی مسیرهای تجاری جاده ابریشم','2025-05-15'),
+(N'BK1006', N'امتحان نگیرید', N'تجاری',N'1756', 180000, 1000000, 10, 0,N'کتابی کاملاً فرضی درباره یادگیری بدون اضطراب امتحان','2025-06-01'),
+(N'BK1006', N'امتحان نگیرید', N'تجاری',N'1756', 1888, 1000000, 10, 0,N'کتابی کاملاً فرضی درباره یادگیری بدون اضطراب امتحان','2025-06-01');
+
+-- رابطه نویسنده و عنوان
+INSERT INTO titleauthor (au_id, title_id, au_ord, royaltyper) VALUES
+(N'172-32-1176', N'BU1032', 1, 100),
+(N'213-46-8915', N'BU1111', 1, 100),
+(N'238-95-7766', N'BU2075', 1, 100),
+(N'267-41-2394', N'BU7832', 1, 100),
+(N'274-80-9391', N'PC1035', 1, 100),
+(N'341-22-1782', N'PC8888', 1, 100),
+(N'472-27-2349', N'PS1372', 1, 60),
+(N'486-29-1786', N'PS1372', 2, 40),
+(N'409-56-7008', N'PS2091', 1, 100),
+(N'427-17-2319', N'TC3218', 1, 100),
+(N'500-11-0001', N'BK1001', 1, 100),
+(N'500-11-0002', N'BK1002', 1, 100),
+(N'500-11-0003', N'BK1003', 1, 100),
+(N'500-11-0004', N'BK1004', 1, 100),
+(N'500-11-0005', N'BK1005', 1, 100),
+(N'500-11-0006', N'BK1006', 1, 100);
+
+-- فروشگاه‌ها
+INSERT INTO stores (stor_id, stor_name, stor_address, city, state, zip) VALUES
+(N'7066', N'کتابفروشی شهر کتاب', N'خیابان ولیعصر، بالاتر از پارک وی', N'تهران', N'TE', N'19617'),
+(N'7067', N'کتابسرای اصفهان', N'خیابان چهارباغ عباسی', N'اصفهان', N'IS', N'81456'),
+(N'7131', N'فروشگاه کتاب شیراز', N'خیابان زند، نزدیک ارگ', N'شیراز', N'FA', N'71365'),
+(N'8042', N'کتاب‌فروشی خراسان', N'خیابان امام رضا', N'مشهد', N'KH', N'91735'),
+(N'6380', N'کتابخانه مرکزی تبریز', N'خیابان امام خمینی', N'تبریز', N'EA', N'51368'),
+(N'7896', N'نشریات و کتاب تهران', N'خیابان انقلاب، روبروی دانشگاه', N'تهران', N'TE', N'13145');
+
+-- فروش
+INSERT INTO sales (stor_id, ord_num, ord_date, qty, payterms, title_id) VALUES
+(N'7066', N'QA7442.3', '2023-09-13', 75, N'Net 60', N'BU1032'),
+(N'7067', N'P2121', '2023-06-15', 40, N'Net 30', N'BU1111'),
+(N'7131', N'N914008', '2023-09-14', 20, N'Net 30', N'BU2075'),
+(N'7131', N'N914014', '2023-09-14', 25, N'Net 30', N'BU7832'),
+(N'8042', N'P3087a', '2023-05-29', 20, N'Net 60', N'PC1035'),
+(N'8042', N'P3087a', '2023-05-29', 25, N'Net 60', N'PC8888'),
+(N'6380', N'A2976', '2023-05-24', 50, N'Net 30', N'PS1372'),
+(N'6380', N'D4482', '2023-07-08', 30, N'Net 60', N'PS2091'),
+(N'7896', N'X999', '2023-02-21', 35, N'ON invoice', N'TC3218'),
+(N'7066', N'P723', '2024-01-10', 60, N'Net 30', N'BU1032'),
+(N'1888', N'BK-ORD-01', '2025-07-01',20, N'Net 30', N'BK1001'),
+(N'1888', N'BK-ORD-02', '2025-07-02',15, N'Net 30', N'BK1002'),
+(N'7066', N'BK-ORD-03', '2025-07-03',12, N'Cash', N'BK1003'),
+(N'1888', N'BK-ORD-04', '2025-07-04',25, N'Net 60', N'BK1004'),
+(N'6380', N'BK-ORD-05', '2025-07-05',18, N'Net 30', N'BK1005'),
+(N'7066', N'BK-ORD-06', '2025-07-06',10, N'Cash', N'BK1006');
+
+-- تخفیف‌ها
+INSERT INTO discounts (discounttype, stor_id, lowqty, highqty, discount) VALUES
+(N'تخفیف اولیه', NULL, NULL, NULL, 10.50),
+(N'تخفیف حجمی', N'8042', 100, 1000, 6.70),
+(N'تخفیف ویژه مشتری', N'7066', NULL, NULL, 5.00),
+(N'تخفیف فروشگاه زنجیره‌ای', NULL, NULL, NULL, 12.00),
+ (N'تخفیف کتاب تجاری', N'1888', 10, 50, 5.00),
+(N'تخفیف کتاب تاریخی', N'6380', 10, 40, 7.50),
+(N'تخفیف کتاب امتحان نگیرید', N'7066', 5, 20, 10.00);
+
+-- جدول حق‌التألیف
+INSERT INTO roysched (title_id, lorange, hirange, royalty) VALUES
+(N'BU1032', 0, 5000, 10),
+(N'BU1032', 5001, 50000, 12),
+(N'BU1111', 0, 1000, 10),
+(N'BU1111', 1001, 5000, 12),
+(N'BU2075', 0, 20000, 10),
+(N'BU2075', 20001, 50000, 14),
+(N'BU7832', 0, 5000, 10),
+(N'PC1035', 0, 2000, 10),
+(N'PC8888', 0, 5000, 12),
+(N'PS1372', 0, 1000, 10),
+  (N'BK1001', 0, 100, 10),
+        (N'BK1002', 0, 100, 12),
+        (N'BK1003', 0, 100, 10),
+        (N'BK1004', 0, 100, 12),
+        (N'BK1005', 0, 100, 15),
+        (N'BK1006', 0, 100, 10);
+--=====================================
+
+--=====================================
+

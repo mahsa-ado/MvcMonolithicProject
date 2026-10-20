@@ -81,11 +81,11 @@ namespace FirstMonolithicProject.Models.Services.Repositories
         #endregion
 
         #region [- SelectById() -]
-        public async Task<Person> SelectById(int Id)
+        public async Task<Person> SelectById(Person person)
         {
             try
             {
-                return await _projectDbContext.Person.FirstOrDefaultAsync(x => x.Id == Id);
+                return await _projectDbContext.Person.FindAsync(person.Id);
 
 
             }

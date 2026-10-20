@@ -29,7 +29,7 @@ public class ProductController : Controller
         {
             Id = product.Id,
             Title = product.Title,
-            Price = product.Price,
+            UnitPrice = product.UnitPrice,
             DescriptionRecord = product.DescriptionRecord,
 
         };
@@ -52,7 +52,7 @@ public class ProductController : Controller
         {
             Id = product.Id,
             Title = product.Title,
-            Price = product.Price,
+            UnitPrice = product.UnitPrice,
             DescriptionRecord = product.DescriptionRecord
         };
         
@@ -96,7 +96,7 @@ public class ProductController : Controller
         {
                 Id = product.Id,
                 Title = product.Title,
-                Price = product.Price,
+                UnitPrice = product.UnitPrice,
                 DescriptionRecord = product.DescriptionRecord,
         };
         
