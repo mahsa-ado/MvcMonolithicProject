@@ -1,4 +1,5 @@
 ﻿using FirstMonolithicProject.Models.DomainModels.ProductAggregates;
+using FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos;
 using FirstMonolithicProject.Models.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,12 +76,12 @@ namespace FirstMonolithicProject.Models.Services.Repositories
 
         #endregion
 
-        #region [- SelectById() -]
-        public async Task<Product> SelectById(int Id)
+        #region [- SelectProductById() -]
+        public async Task<Product?> SelectProductById(GetProductByIdDto getProductByIdDto)
         {
             try
             {
-                return await _projectDbContext.Product.FirstOrDefaultAsync(x => x.Id == Id);
+                return await _projectDbContext.Product.FindAsync(getProductByIdDto.Id);
             }
             catch (Exception )
             {

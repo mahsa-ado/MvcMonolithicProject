@@ -21,42 +21,38 @@ public class PersonController : Controller
 
     #region [- Detail() -]
 
-    public async Task<IActionResult> Detail(GetPersonDtoById getPersonDtoById)
+    public async Task<IActionResult> Detail(GetPersonByIdDto getPersonDtoById)
     {
-        var person = await _personApplicationService.GetById(getPersonDtoById);
-        if (person == null)
+        if (getPersonDtoById == null)
         {
             return NotFound();
         }
-        var getPersonDto = new GetPersonDto()
+        var result = await _personApplicationService.GetPersonDetail(getPersonDtoById);
+        if (result == null)
         {
-            Id = person.Id,
-            FirstName = person.FirstName,
-            LastName = person.LastName,
-            Age = person.Age,
-        };
-        return View(getPersonDto);
+            return NotFound();
+        }
+        
+        return View(result);
     }
     #endregion
 
     #region [- Edit() -]
     #region [- Get() -]
     [HttpGet]
-    public async Task<IActionResult> Edit(GetPersonDtoById getPersonDtoById)
+    public async Task<IActionResult> Edit(GetPersonByIdDto getPersonDtoById)
     {
-        var person=await _personApplicationService.GetById(getPersonDtoById);
-        if (person==null)
+        if (getPersonDtoById == null)
         {
             return NotFound();
         }
-        var editDto = new PutPersonDto()
+        var result = await _personApplicationService.GetPersonById(getPersonDtoById);
+        if (result == null)
         {
-            Id = person.Id,
-            FirstName = person.FirstName,
-            LastName = person.LastName,
-            Age = person.Age,
-        };
-        return View(editDto);
+            return NotFound();
+        }
+        
+        return View(result);
     }
     #endregion
     #region [- Post() -]
@@ -79,14 +75,14 @@ public class PersonController : Controller
 
     #region [- Delete() -]
     #region [- Get() -]
-    public async Task<IActionResult> Delete(GetPersonDtoById getPersonDtoById) 
+    public async Task<IActionResult> Delete(GetPersonByIdDto getPersonDtoById)
     {
-        if (getPersonDtoById == null )
+        if (getPersonDtoById == null)
         {
             return NotFound();
         }
 
-        var person = await _personApplicationService.GetById(getPersonDtoById);
+        var person = await _personApplicationService.GetPersonDelete(getPersonDtoById);
 
         if (person == null)
         {
@@ -153,5 +149,5 @@ public class PersonController : Controller
 
     #endregion
 
-    
+
 }

@@ -1,10 +1,10 @@
-﻿using FirstMonolithicProject.Models.DomainModels.ProductAggregates;
+﻿using FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos;
+using FirstMonolithicProject.Models.DomainModels.ProductAggregates;
 
 namespace FirstMonolithicProject.Models.Services.Contracts
 {
     public interface IProductRepository
     {
-        //Task Detail (Product product);
 
         #region [- Update() -]
         Task Update(Product product);
@@ -24,8 +24,8 @@ namespace FirstMonolithicProject.Models.Services.Contracts
         Task<List<Product>> SelectAll();
         #endregion
 
-        #region [- SelectById() -]
-        Task<Product> SelectById(int Id);
+        #region [- SelectProductById() -]
+        Task<Product?> SelectProductById(GetProductByIdDto getProductByIdDto);
 
         #endregion
     }

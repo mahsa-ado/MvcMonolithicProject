@@ -5,7 +5,12 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
     public interface IProductApplicationService
     {
         #region [- Put() -]
-        Task Put(UpdateProductDto updateProductDto);
+        Task Put(PutProductDto updateProductDto);
+
+        #endregion
+
+        #region [- GetProductForDelete() -]
+        Task<DeleteProductDto?> GetProductDelete(GetProductByIdDto getProductByIdDto);
 
         #endregion
 
@@ -19,13 +24,18 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
 
         #endregion
 
+        #region [- GetProductDetail() -]
+        Task<DetailProductDto?> GetProductDetail(GetProductByIdDto getProductByIdDto) ;
+
+        #endregion
+
         #region [- GetAllProducts() -]
         Task<List<GetProductDto>> GetAllProducts();
 
         #endregion
 
-        #region [- GetById() -]
-        Task<GetProductDtoById> GetById(int id);
+        #region [- GetProductById() -]
+        Task<PutProductDto?> GetProductById(GetProductByIdDto getProductByIdDto);
 
         #endregion    
     }

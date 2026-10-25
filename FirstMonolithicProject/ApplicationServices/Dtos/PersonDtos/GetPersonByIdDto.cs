@@ -1,6 +1,6 @@
 ﻿namespace FirstMonolithicProject.ApplicationServices.Dtos.PersonDtos
 {
-    public class GetPersonDtoById
+    public class GetPersonByIdDto
     {
         public int Id { get; set; }
        

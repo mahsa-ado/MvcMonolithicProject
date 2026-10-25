@@ -49,7 +49,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
 
         #endregion
 
-        #region [- insert() -]
+        #region [- Insert() -]
         public async Task Insert(Person person)
         {
             try
@@ -64,7 +64,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
         }
         #endregion
 
-        #region [- SelectAll() -]
+        #region [- SelectAllPerson() -]
         public async Task<List<Person>> SelectAll()
         {
             try
@@ -80,21 +80,20 @@ namespace FirstMonolithicProject.Models.Services.Repositories
 
         #endregion
 
-        #region [- SelectById() -]
-        public async Task<Person> SelectById(Person person)
-        {
+        #region [- SelectPersonById() -]
+        public async Task<Person?> SelectPersonById(GetPersonByIdDto getPersonDtoById)        {
             try
             {
-                return await _projectDbContext.Person.FindAsync(person.Id);
+                return await _projectDbContext.Person.FindAsync(getPersonDtoById.Id);
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
 
-        } 
+        }
         #endregion
     }
 }

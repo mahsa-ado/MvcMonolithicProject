@@ -1,6 +1,6 @@
 ﻿namespace FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos
 {
-    public class UpdateProductDto
+    public class PutProductDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

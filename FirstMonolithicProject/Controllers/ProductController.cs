@@ -18,22 +18,16 @@ public class ProductController : Controller
 
     #region [- Detail() -]
     [HttpGet]
-    public async Task<IActionResult> Detail(int Id)
+    public async Task<IActionResult> Detail(GetProductByIdDto getProductByIdDto)
     {
-        var product = await _productApplicationService.GetById(Id);
-        if (product == null)
+        var result = await _productApplicationService.GetProductDetail(getProductByIdDto);
+
+        if (result == null)
         {
             return NotFound();
         }
-        var detailDto = new DetailProductDto
-        {
-            Id = product.Id,
-            Title = product.Title,
-            UnitPrice = product.UnitPrice,
-            DescriptionRecord = product.DescriptionRecord,
 
-        };
-        return View(detailDto);
+        return View(result);
     }
     #endregion
 
@@ -41,30 +35,22 @@ public class ProductController : Controller
 
     #region [- Get() -]
     [HttpGet]
-    public async Task<IActionResult> Edit(int Id)
+    public async Task<IActionResult> Edit(GetProductByIdDto getProductDtoById)
     {
-        var product =await _productApplicationService.GetById(Id);
-        if(product==null)
+        var product = await _productApplicationService.GetProductById(getProductDtoById);
+        if (product == null)
         {
             return NotFound();
         }
-        var updateDto = new UpdateProductDto
-        {
-            Id = product.Id,
-            Title = product.Title,
-            UnitPrice = product.UnitPrice,
-            DescriptionRecord = product.DescriptionRecord
-        };
-        
 
-        return View(updateDto);
+        return View(product);
     }
     #endregion
 
     #region [- Post() -]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(UpdateProductDto updateProductDto)
+    public async Task<IActionResult> Edit(PutProductDto updateProductDto)
     {
         if (ModelState.IsValid)
         {
@@ -84,23 +70,15 @@ public class ProductController : Controller
 
     #region [- Get() -]
     [HttpGet]
-    public async Task<IActionResult> Delete(int Id)
+    public async Task<IActionResult> Delete(GetProductByIdDto getProductDtoById)
     {
-        var product=await _productApplicationService.GetById(Id);
-        if( product==null)
+        var product = await _productApplicationService.GetProductDelete(getProductDtoById);
+        if (product == null)
         {
             return NotFound();
         }
 
-        var deleteDto = new DeleteProductDto
-        {
-                Id = product.Id,
-                Title = product.Title,
-                UnitPrice = product.UnitPrice,
-                DescriptionRecord = product.DescriptionRecord,
-        };
-        
-        return View(deleteDto);
+        return View(product);
 
     }
     #endregion

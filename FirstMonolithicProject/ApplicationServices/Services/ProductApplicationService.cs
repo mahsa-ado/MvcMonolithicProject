@@ -1,13 +1,15 @@
-﻿using FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos;
+﻿using FirstMonolithicProject.ApplicationServices.Dtos.PersonDtos;
+using FirstMonolithicProject.ApplicationServices.Dtos.ProductDtos;
 using FirstMonolithicProject.ApplicationServices.Services.Contracts;
 using FirstMonolithicProject.Models.DomainModels.ProductAggregates;
 using FirstMonolithicProject.Models.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Net.WebSockets;
 
 namespace FirstMonolithicProject.ApplicationServices.Services
 {
-    public class ProductApplicationService:IProductApplicationService
+    public class ProductApplicationService : IProductApplicationService
     {
         private readonly IProductRepository _productRepository;
         #region [-ctor-]
@@ -18,34 +20,56 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         #endregion
 
         #region [- Put() -]
-        public async Task Put(UpdateProductDto updateProductDto)
+        public async Task Put(PutProductDto updateProductDto)
         {
-            if(updateProductDto == null)
+            if (updateProductDto == null)
             {
                 return;
             }
             var updateProduct = new Product()
             {
-                Id=updateProductDto.Id,
+                Id = updateProductDto.Id,
                 Title = updateProductDto.Title,
                 UnitPrice = updateProductDto.UnitPrice,
                 DescriptionRecord = updateProductDto.DescriptionRecord,
             };
-            
+
             await _productRepository.Update(updateProduct);
+        }
+        #endregion
+
+        #region [- GetProductForDelete() -]
+        public async Task<DeleteProductDto?> GetProductDelete(GetProductByIdDto getProductByIdDto)
+        {
+            var product = await _productRepository.SelectProductById(getProductByIdDto);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            var deleteProductDto = new DeleteProductDto
+            {
+                Id = product.Id,
+                Title = product.Title,
+                DescriptionRecord = product.DescriptionRecord,
+                UnitPrice = product.UnitPrice,
+            };
+
+            return deleteProductDto;
         }
         #endregion
 
         #region [- Delete() -]
         public async Task Delete(DeleteProductDto deleteProductDto)
         {
-            if(deleteProductDto== null)
+            if (deleteProductDto == null)
             {
                 return;
             }
             var deleteProducts = new Product()
             {
-                Id=deleteProductDto.Id,
+                Id = deleteProductDto.Id,
                 Title = deleteProductDto.Title,
                 UnitPrice = deleteProductDto.UnitPrice,
                 DescriptionRecord = deleteProductDto.DescriptionRecord,
@@ -57,13 +81,13 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         #region [- Post() -]
         public async Task Post(PostProductDto postProductDto)
         {
-            if(postProductDto == null)
+            if (postProductDto == null)
             {
                 return;
             }
             var products = new Product()
             {
-                Id= postProductDto.Id,
+                Id = postProductDto.Id,
                 Title = postProductDto.Title,
                 UnitPrice = postProductDto.UnitPrice,
                 DescriptionRecord = postProductDto.DescriptionRecord,
@@ -73,17 +97,36 @@ namespace FirstMonolithicProject.ApplicationServices.Services
 
         #endregion
 
-        #region [- GetAll() -]
+        #region [- GetProductDetail() -]
+        public async Task<DetailProductDto?> GetProductDetail(GetProductByIdDto getProductByIdDto)
+        {
+            var product = await _productRepository.SelectProductById(getProductByIdDto);
+
+            if (product == null)
+            {
+                return null;
+            }
+            var detailProductDto = new DetailProductDto
+            {
+                Id = product.Id,
+                Title = product.Title,
+                DescriptionRecord = product.DescriptionRecord,
+                UnitPrice = product.UnitPrice
+            };
+            return detailProductDto;
+        }
+        #endregion 
+
+        #region [- GetAllProducts() -]
         public async Task<List<GetProductDto>> GetAllProducts()
         {
-            
             var products = await _productRepository.SelectAll();
             var getDto = new List<GetProductDto>();
             foreach (var product in products)
             {
                 var productDto = new GetProductDto()
                 {
-                    Id= product.Id,
+                    Id = product.Id,
                     Title = product.Title,
                     UnitPrice = product.UnitPrice,
                     DescriptionRecord = product.DescriptionRecord,
@@ -96,16 +139,16 @@ namespace FirstMonolithicProject.ApplicationServices.Services
 
         #endregion
 
-        #region [- GetById() -]
-        public async Task<GetProductDtoById?> GetById(int Id)
+        #region [- GetProductById() -]
+        public async Task<PutProductDto?> GetProductById(GetProductByIdDto getProductByIdDto)
         {
-            
-            var product = await _productRepository.SelectById(Id);
+
+            var product = await _productRepository.SelectProductById(getProductByIdDto);
             if (product == null)
             {
                 return null;
             }
-            var getProduct = new GetProductDtoById()
+            var productDto = new PutProductDto()
             {
                 Id = product.Id,
                 Title = product.Title,
@@ -113,12 +156,10 @@ namespace FirstMonolithicProject.ApplicationServices.Services
                 DescriptionRecord = product.DescriptionRecord,
             };
 
-            return getProduct;
+            return productDto;
         }
 
         #endregion
-
-
 
     }
 }

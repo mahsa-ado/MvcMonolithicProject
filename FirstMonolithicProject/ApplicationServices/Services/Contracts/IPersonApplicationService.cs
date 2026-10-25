@@ -8,6 +8,11 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
         Task Put(PutPersonDto putPersonDto);
         #endregion
 
+        #region [- GetPersonForDelete() -]
+        Task<DeletePersonDto?> GetPersonDelete(GetPersonByIdDto getPersonByIdDto);
+
+        #endregion        
+
         #region [- Delete() -]
         Task Delete(DeletePersonDto deletePersonDto);
         #endregion
@@ -16,13 +21,17 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
         Task Post(PostPersonDto postPersonDto);
         #endregion
 
+        #region [- GetPersonDetail() -]
+        Task<DetailPersonDto?> GetPersonDetail(GetPersonByIdDto getPersonDtoById);
+        #endregion
+
         #region [- GetAllPerson() -]
         Task<List<GetPersonDto>> GetAllPerson();
 
         #endregion
 
-        #region [- GetById() -]
-        Task<PutPersonDto?> GetById(GetPersonDtoById getPersonDtoById);
+        #region [- GetPersonById() -]
+        Task<PutPersonDto?> GetPersonById(GetPersonByIdDto getPersonDtoById);
         #endregion
 
     }

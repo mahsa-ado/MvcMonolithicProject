@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FirstMonolithicProject.ApplicationServices.Services
 {
-    public class PersonApplicationService:IPersonApplicationService
+    public class PersonApplicationService : IPersonApplicationService
     {
         private readonly IPersonRepository _personRepository;
         #region [- ctor -]
@@ -19,9 +19,10 @@ namespace FirstMonolithicProject.ApplicationServices.Services
 
         #region [- Put() -]
         public async Task Put(PutPersonDto putPersonDto)
-        {   if(putPersonDto == null)
-            { 
-                return ;
+        {
+            if (putPersonDto == null)
+            {
+                return;
             }
             var putPerson = new Person()
             {
@@ -35,29 +36,48 @@ namespace FirstMonolithicProject.ApplicationServices.Services
 
         #endregion
 
+        #region [- GetPersonForDelete() -]
+        public async Task<DeletePersonDto?> GetPersonDelete(GetPersonByIdDto getPersonByIdDto)
+        {
+            var person = await _personRepository.SelectPersonById(getPersonByIdDto);
+
+            if (person == null)
+            {
+                return null;
+            }
+
+            var deletePersonDto = new DeletePersonDto
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Age=person.Age,
+            };
+
+            return deletePersonDto;
+        }
+        #endregion
+
         #region [- Delete() -]
         public async Task Delete(DeletePersonDto deletePersonDto)
         {
-            if(deletePersonDto == null)
+            
+            var deletePerson = new Person
             {
-                return;
-            }
-            var deletePerson = new Person()
-            {  
                 Id = deletePersonDto.Id,
                 FirstName = deletePersonDto.FirstName,
                 LastName = deletePersonDto.LastName,
                 Age = deletePersonDto.Age
             };
             await _personRepository.Delete(deletePerson);
-            
+
         }
         #endregion
 
         #region [- Post() -]
         public async Task Post(PostPersonDto postPersonDto)
         {
-            if(postPersonDto == null)
+            if (postPersonDto == null)
             {
                 return;
             }
@@ -69,6 +89,27 @@ namespace FirstMonolithicProject.ApplicationServices.Services
                 Age = postPersonDto.Age,
             };
             await _personRepository.Insert(person);
+        }
+        #endregion
+
+        #region [- GetPersonDetail() -]
+        public async Task<DetailPersonDto?> GetPersonDetail(GetPersonByIdDto getPersonDtoById)
+        {
+          
+            var persons = await _personRepository.SelectPersonById(getPersonDtoById);
+            if (persons == null)
+            {
+                return null;
+            }
+            var detailPesronDto = new DetailPersonDto
+            {
+                Id = persons.Id,
+                FirstName = persons.FirstName,
+                LastName = persons.LastName,
+                Age = persons.Age,
+            };
+            return detailPesronDto;
+
         }
         #endregion
 
@@ -84,7 +125,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services
                     Id = person.Id,
                     FirstName = person.FirstName,
                     LastName = person.LastName,
-                    Age= person.Age,
+                    Age = person.Age,
                 };
                 getPersonDtos.Add(getPersonDto);
             }
@@ -92,15 +133,14 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         }
         #endregion
 
-        //check line100
-
-        #region [- GetById() -]
-        public async Task<PutPersonDto?> GetById(GetPersonDtoById getPersonDtoById)
+        #region [- GetPersonById() -]
+        public async Task<PutPersonDto?> GetPersonById(GetPersonByIdDto getPersonDtoById)
         {
-            var person = await _personRepository.SelectById(getPersonDtoById);
+           
+            var person = await _personRepository.SelectPersonById(getPersonDtoById);
             if (person == null)
             {
-                return null ;
+                return null;
             }
             var putPersonDto = new PutPersonDto
             {
@@ -110,7 +150,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services
                 Age = person.Age
             };
             return putPersonDto;
-        } 
+        }
         #endregion
 
     }

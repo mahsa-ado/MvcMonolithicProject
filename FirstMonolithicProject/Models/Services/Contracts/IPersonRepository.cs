@@ -22,8 +22,8 @@ namespace FirstMonolithicProject.Models.Services.Contracts
 
         #endregion
 
-        #region [- SelectById() -]
-        Task<Person?> SelectById(Person person);
+        #region [- SelectPersonById() -]
+        Task<Person?> SelectPersonById(GetPersonByIdDto getPersonDtoById);
         #endregion
     }
 
