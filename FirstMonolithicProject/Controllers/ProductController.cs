@@ -18,7 +18,7 @@ public class ProductController : Controller
 
     #region [- Detail() -]
     [HttpGet]
-    public async Task<IActionResult> Details(GetProductByIdDto getProductByIdDto)
+    public async Task<IActionResult> Detail(GetProductByIdDto getProductByIdDto)
     {
         var result = await _productApplicationService.GetProductDetail(getProductByIdDto);
 

@@ -98,6 +98,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         #endregion
 
         #region [- GetProductDetail() -]
+
         public async Task<DetailProductDto?> GetProductDetail(GetProductByIdDto getProductByIdDto)
         {
             var product = await _productRepository.SelectProductById(getProductByIdDto);

@@ -10,12 +10,10 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
 
         #region [- GetProductForDelete() -]
         Task<DeleteProductDto?> GetProductDelete(GetProductByIdDto getProductByIdDto);
-
         #endregion
 
         #region [- Delete() -]
         Task Delete(DeleteProductDto deleteProductDto);
-
         #endregion
 
         #region [- Post() -]
@@ -24,7 +22,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
         #endregion
 
         #region [- GetProductDetail() -]
-        Task<DetailProductDto?> GetProductDetail(GetProductByIdDto getProductByIdDto);
+       Task<DetailProductDto?> GetProductDetail(GetProductByIdDto getProductByIdDto);
 
         #endregion
 
@@ -35,7 +33,6 @@ namespace FirstMonolithicProject.ApplicationServices.Services.Contracts
 
         #region [- GetProductById() -]
         Task<PutProductDto?> GetProductById(GetProductByIdDto getProductByIdDto);
-
         #endregion
 
     }  
