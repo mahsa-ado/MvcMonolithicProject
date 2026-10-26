@@ -83,7 +83,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
             {
                 return await _projectDbContext.Product.FindAsync(getProductByIdDto.Id);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }

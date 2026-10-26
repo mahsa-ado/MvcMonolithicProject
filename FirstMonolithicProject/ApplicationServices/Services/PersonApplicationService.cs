@@ -136,8 +136,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         #region [- GetPersonById() -]
         public async Task<PutPersonDto?> GetPersonById(GetPersonByIdDto getPersonDtoById)
         {
-           
-            var person = await _personRepository.SelectPersonById(getPersonDtoById);
+            var person = await _personRepository.SelectPersonById(getPersonDtoById);        
             if (person == null)
             {
                 return null;

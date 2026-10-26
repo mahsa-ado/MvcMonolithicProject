@@ -18,7 +18,7 @@ public class ProductController : Controller
 
     #region [- Detail() -]
     [HttpGet]
-    public async Task<IActionResult> Detail(GetProductByIdDto getProductByIdDto)
+    public async Task<IActionResult> Details(GetProductByIdDto getProductByIdDto)
     {
         var result = await _productApplicationService.GetProductDetail(getProductByIdDto);
 
@@ -73,7 +73,7 @@ public class ProductController : Controller
     public async Task<IActionResult> Delete(GetProductByIdDto getProductDtoById)
     {
         var product = await _productApplicationService.GetProductDelete(getProductDtoById);
-        if (product == null)
+        if( product==null)
         {
             return NotFound();
         }

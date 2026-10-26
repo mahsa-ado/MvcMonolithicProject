@@ -40,7 +40,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
                 _projectDbContext.Remove(person);
                 await _projectDbContext.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }
@@ -57,7 +57,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
                 _projectDbContext.Add(person);
                 await _projectDbContext.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -71,7 +71,7 @@ namespace FirstMonolithicProject.Models.Services.Repositories
             {
                 return await _projectDbContext.Person.ToListAsync();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }
@@ -81,7 +81,9 @@ namespace FirstMonolithicProject.Models.Services.Repositories
         #endregion
 
         #region [- SelectPersonById() -]
-        public async Task<Person?> SelectPersonById(GetPersonByIdDto getPersonDtoById)        {
+        public async Task<Person?> SelectPersonById(GetPersonByIdDto getPersonDtoById)        
+        {
+
             try
             {
                 return await _projectDbContext.Person.FindAsync(getPersonDtoById.Id);

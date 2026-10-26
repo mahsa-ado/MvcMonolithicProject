@@ -144,6 +144,7 @@ namespace FirstMonolithicProject.ApplicationServices.Services
         {
 
             var product = await _productRepository.SelectProductById(getProductByIdDto);
+        
             if (product == null)
             {
                 return null;
